@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
         #catalog-frame {
             width: 100%;
@@ -22,7 +22,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,8 +31,9 @@
         }
         .loading-text {
             margin-top: 20px;
-            font-family: Arial, sans-serif;
             color: #333;
+            text-align: center;
+            max-width: 80%;
         }
         .spinner {
             width: 40px;
@@ -52,271 +53,125 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
-            display: none;
+            max-width: 80%;
+            z-index: 1001;
+        }
+        .error-container h3 {
+            color: #dc3545;
+            margin-top: 0;
         }
         .error-container button {
-            margin-top: 15px;
-            padding: 8px 16px;
+            margin-top: 20px;
+            padding: 10px 20px;
             background: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
         .error-container button:hover {
             background: #218838;
+        }
+        #timeout-warning {
+            display: none;
+            color: #856404;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div id="loading" class="loading">
         <div class="spinner"></div>
-        <div class="loading-text">Cargando catálogo...</div>
+        <div class="loading-text">
+            Cargando catálogo...
+            <div id="timeout-warning">
+                La carga está tomando más tiempo de lo esperado. 
+                Esto puede deberse a la configuración de seguridad del sitio.
+            </div>
+        </div>
     </div>
-    <div id="error-container" class="error-container">
+
+    <div id="error-container" class="error-container" style="display: none;">
         <h3>Error al cargar el catálogo</h3>
         <p id="error-message"></p>
         <button onclick="window.location.href='index.html'">Volver al inicio</button>
     </div>
+
     <iframe id="catalog-frame"></iframe>
 
     <script>
-        // Función para obtener parámetros de la URL
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // Función para mostrar error
         function showError(message) {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('error-container').style.display = 'block';
             document.getElementById('error-message').textContent = message;
         }
 
-        // Código de conversión de precios
-        const priceConverter = `
-            // Constantes para los cálculos
-            const FIXED_COP_RATE = 3100;
-            const REGULAR_MARKUP = 1.40;
-            const HEAVY_MARKUP = 1.80;
-            const HEAVY_WEIGHT_THRESHOLD = 700;
-
-            function convertCOPtoUSD(copAmount, weightInGrams = 0) {
-                let usdBase = copAmount / FIXED_COP_RATE;
-                if (weightInGrams >= HEAVY_WEIGHT_THRESHOLD) {
-                    usdBase *= HEAVY_MARKUP;
-                } else {
-                    usdBase *= REGULAR_MARKUP;
-                }
-                return usdBase.toFixed(2);
+        window.onload = function() {
+            const catalogUrl = getQueryParam('url');
+            if (!catalogUrl) {
+                showError('URL del catálogo no proporcionada');
+                return;
             }
 
-            function formatUSDPrice(price) {
-                return \`$\${price} USD\`;
-            }
-
-            function extractPrice(priceString) {
-                if (!priceString || priceString.includes('USD')) return null;
-                
-                priceString = priceString.trim().replace(/\\s+/g, '');
-                const matches = priceString.match(/\\$\\s*([\\d,.]+)/);
-                if (!matches) return null;
-
-                let numericString = matches[1].replace(/[,.]/g, '');
-                if (matches[1].includes('.') || matches[1].includes(',')) {
-                    const parts = matches[1].split(/[,.]/);
-                    if (parts.length > 1) {
-                        numericString = parts.slice(0, -1).join('') + '.' + parts[parts.length - 1];
-                    }
-                }
-
-                const price = parseFloat(numericString);
-                if (price < 1000 || price > 1000000) return null;
-                return price;
-            }
-
-            function extractWeight(element) {
-                let currentElement = element;
-                let maxDepth = 5;
-                while (currentElement && maxDepth > 0) {
-                    const text = currentElement.textContent.toLowerCase();
-                    const weightMatch = text.match(/(\\d+)\\s*(gr|g|gramos|grs)/);
-                    if (weightMatch) return parseInt(weightMatch[1]);
-                    currentElement = currentElement.parentElement;
-                    maxDepth--;
-                }
-                return 0;
-            }
-
-            function updatePriceElement(element) {
-                if (element.tagName === 'SCRIPT' || 
-                    element.style.display === 'none' || 
-                    element.style.visibility === 'hidden' ||
-                    element.dataset.priceConverted === 'true') return;
-
-                const originalText = element.textContent.trim();
-                const priceInCOP = extractPrice(originalText);
-                
-                if (priceInCOP) {
-                    const weightInGrams = extractWeight(element);
-                    const priceInUSD = convertCOPtoUSD(priceInCOP, weightInGrams);
-                    element.dataset.priceConverted = 'true';
-
-                    const usdSpan = document.createElement('span');
-                    usdSpan.style.color = weightInGrams >= HEAVY_WEIGHT_THRESHOLD ? '#ff6b6b' : '#28a745';
-                    usdSpan.style.fontWeight = 'bold';
-                    usdSpan.style.marginLeft = '5px';
-                    usdSpan.textContent = \`(\${formatUSDPrice(priceInUSD)})\`;
-                    
-                    element.appendChild(document.createTextNode(' '));
-                    element.appendChild(usdSpan);
-                }
-            }
-
-            function updatePrices() {
-                const priceElements = document.evaluate(
-                    "//div[contains(text(), '$') and not(contains(text(), 'USD'))] | " +
-                    "//span[contains(text(), '$') and not(contains(text(), 'USD'))] | " +
-                    "//p[contains(text(), '$') and not(contains(text(), 'USD'))] | " +
-                    "//b[contains(text(), '$') and not(contains(text(), 'USD'))]",
-                    document,
-                    null,
-                    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-                    null
-                );
-
-                const processedElements = new Set();
-                for (let i = 0; i < priceElements.snapshotLength; i++) {
-                    const element = priceElements.snapshotItem(i);
-                    if (!element.dataset.priceConverted && !processedElements.has(element)) {
-                        processedElements.add(element);
-                        const parent = element.parentElement;
-                        if (parent) {
-                            const siblings = parent.children;
-                            for (let j = 0; j < siblings.length; j++) {
-                                const sibling = siblings[j];
-                                if (sibling !== element && 
-                                    sibling.textContent.includes('$') && 
-                                    !sibling.textContent.includes('USD') &&
-                                    !processedElements.has(sibling)) {
-                                    processedElements.add(sibling);
-                                    updatePriceElement(sibling);
-                                }
-                            }
-                        }
-                        updatePriceElement(element);
-                    }
-                }
-            }
-
-            function init() {
-                setTimeout(() => updatePrices(), 2000);
-                
-                const observer = new MutationObserver(() => {
-                    setTimeout(updatePrices, 500);
-                });
-                
-                observer.observe(document.body, {
-                    childList: true,
-                    subtree: true
-                });
-                
-                setInterval(() => updatePrices(), 3000);
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
-        `;
-
-        // Configurar el iframe
-       window.onload = function() {
-    const catalogUrl = getQueryParam('url');
-    if (!catalogUrl) {
-        showError('URL del catálogo no proporcionada');
-        return;
-    }
-
-    const frame = document.getElementById('catalog-frame');
-    
-    // Configurar el iframe con sandbox y allow-same-origin
-    frame.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms');
-    frame.setAttribute('allow', 'fullscreen');
-    
-    frame.onload = function() {
-        try {
-            // Inyectar el script de conversión
-            const script = frame.contentDocument.createElement('script');
-            script.textContent = priceConverter;
-            frame.contentDocument.head.appendChild(script);
-            
-            // Ocultar la pantalla de carga
-            document.getElementById('loading').style.display = 'none';
-        } catch (e) {
-            console.error('Error al inyectar el script:', e);
-            showError('Error al cargar el convertidor de precios. Por favor, intenta nuevamente.');
-        }
-    };
-
-    frame.onerror = function() {
-        showError('Error al cargar el catálogo. Por favor, verifica la URL e intenta nuevamente.');
-    };
-    
-    try {
-        const url = new URL(catalogUrl);
-        if (!url.hostname.includes('somosbelcorp')) {
-            showError('Por favor ingresa una URL válida de un catálogo de Belcorp');
-            return;
-        }
-        // Asegurarse de que la URL use HTTPS
-        if (url.protocol === 'http:') {
-            url.protocol = 'https:';
-        }
-        frame.src = url.toString();
-    } catch (e) {
-        showError('URL inválida. Por favor verifica el enlace del catálogo');
-    }
-};
             const frame = document.getElementById('catalog-frame');
+            const timeoutWarning = document.getElementById('timeout-warning');
+            
+            // Mostrar advertencia después de 10 segundos
+            setTimeout(() => {
+                timeoutWarning.style.display = 'block';
+            }, 10000);
+
+            // Timeout total después de 30 segundos
+            const loadTimeout = setTimeout(() => {
+                showError('El catálogo está tardando demasiado en cargar. Por favor, intenta nuevamente o verifica la URL.');
+            }, 30000);
+
             frame.onload = function() {
+                clearTimeout(loadTimeout);
+                document.getElementById('loading').style.display = 'none';
+                
                 try {
-                    // Inyectar el script de conversión
-                    const script = frame.contentDocument.createElement('script');
-                    script.textContent = priceConverter;
-                    frame.contentDocument.head.appendChild(script);
-                    
-                    // Ocultar la pantalla de carga
-                    document.getElementById('loading').style.display = 'none';
+                    // Intentar acceder al contenido del iframe
+                    const test = frame.contentWindow.location.href;
                 } catch (e) {
-                    console.error('Error al inyectar el script:', e);
-                    showError('Error al cargar el convertidor de precios. Por favor, intenta nuevamente.');
+                    showError('No se puede acceder al catálogo debido a restricciones de seguridad. Por favor, intenta con otro enlace del catálogo.');
+                    return;
                 }
             };
 
             frame.onerror = function() {
+                clearTimeout(loadTimeout);
                 showError('Error al cargar el catálogo. Por favor, verifica la URL e intenta nuevamente.');
             };
-            
-          try {
-    const url = new URL(catalogUrl);
-    if (!url.hostname.includes('somosbelcorp')) {
-        showError('Por favor ingresa una URL válida de un catálogo de Belcorp');
-        return;
-    }
-    if (url.protocol === 'http:') {
-        url.protocol = 'https:';
-    }
-    frame.src = url.toString();
-} catch (e) {
-    showError('URL inválida. Por favor verifica el enlace del catálogo');
-}
+
+            try {
+                const url = new URL(catalogUrl);
+                if (!url.hostname.includes('somosbelcorp')) {
+                    showError('Por favor ingresa una URL válida de un catálogo de Belcorp');
+                    return;
+                }
+                if (url.protocol === 'http:') {
+                    url.protocol = 'https:';
+                }
+                frame.src = url.toString();
+            } catch (e) {
+                showError('URL inválida. Por favor verifica el enlace del catálogo');
+            }
         };
     </script>
 </body>
