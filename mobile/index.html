@@ -46,15 +46,6 @@
         .copy-button:active {
             transform: scale(0.98);
         }
-        .code-container {
-            display: none;
-            margin: 20px;
-            padding: 15px;
-            background: #f8f8f8;
-            border-radius: 8px;
-            text-align: left;
-            word-break: break-all;
-        }
         .instructions {
             margin: 20px auto;
             max-width: 300px;
@@ -124,7 +115,8 @@
                 ✨ Para usar:
                 <ul style="margin: 10px 0 0 20px; padding: 0;">
                     <li>Ve al catálogo de Belcorp</li>
-                    <li>Toca Favoritos</li>
+                    <li>Toca los tres puntos ⋮</li>
+                    <li>Toca "Favoritos"</li>
                     <li>Selecciona "💱 Convertir Precios"</li>
                 </ul>
             </div>
@@ -136,7 +128,7 @@
             <br>🔴 Rojo: Productos pesados (+80%)
         </div>
 
-        <textarea id="codeText" style="position: absolute; left: -9999px;">javascript:(function(){var s=document.createElement('script');s.src='https://calebanderson-coder.github.io/belcorp-price-converter/mobile/converter.js';document.body.appendChild(s);})();</textarea>
+        <textarea id="codeText" style="position: absolute; left: -9999px;">javascript:(function(){const EXCHANGE_RATE=3100;const REGULAR_MARKUP=1.40;function convertPrice(text){const price=parseFloat(text.replace(/[^0-9.]/g,''));const usd=(price/EXCHANGE_RATE)*REGULAR_MARKUP;return usd.toFixed(2)}const button=document.createElement('button');button.style.cssText='position:fixed;bottom:20px;right:20px;background:#e75480;color:white;padding:15px;border-radius:25px;box-shadow:0 2px 10px rgba(0,0,0,0.2);z-index:9999;font-family:Arial;cursor:pointer;border:none;';button.textContent='💱 Actualizar Precios';function updatePrices(){document.querySelectorAll('*').forEach(el=>{if(el.childNodes.length===1&&el.textContent.includes('$')){const usdPrice=convertPrice(el.textContent);if(!el.querySelector('.usd-price')){const span=document.createElement('span');span.className='usd-price';span.style.color='#4CAF50';span.style.marginLeft='10px';span.style.fontWeight='bold';span.textContent=`$${usdPrice}`;el.appendChild(span)}}})}button.onclick=updatePrices;document.body.appendChild(button);updatePrices();setInterval(updatePrices,3000);})();</textarea>
     </div>
 
     <script>
