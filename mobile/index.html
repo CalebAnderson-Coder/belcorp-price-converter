@@ -28,7 +28,7 @@
             margin-bottom: 20px;
             font-size: 24px;
         }
-        #bookmarklet {
+        .copy-button {
             display: inline-block;
             background: #e75480;
             color: white;
@@ -41,6 +41,19 @@
             cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
+            border: none;
+        }
+        .copy-button:active {
+            transform: scale(0.98);
+        }
+        .code-container {
+            display: none;
+            margin: 20px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            text-align: left;
+            word-break: break-all;
         }
         .instructions {
             margin: 20px auto;
@@ -73,31 +86,46 @@
             padding: 15px;
             border-radius: 8px;
         }
+        .success-message {
+            display: none;
+            color: #4CAF50;
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>💱 Convertidor de Precios Belcorp</h1>
         
-        <a id="bookmarklet" href="javascript:(function(){var s=document.createElement('script');s.src='https://calebanderson-coder.github.io/belcorp-price-converter/mobile/converter.js';document.body.appendChild(s);})();">
-            💱 Convertir Precios
-        </a>
+        <button class="copy-button" onclick="copyCode()">
+            📋 Toca aquí para copiar el código
+        </button>
+
+        <div id="successMessage" class="success-message">
+            ✅ ¡Código copiado!
+        </div>
 
         <div class="instructions">
             <div class="step">
                 <div class="menu-icon">⋮</div>
-                1️⃣ Toca los tres puntos de arriba
+                1️⃣ Toca los tres puntos de Chrome
+            </div>
+            <div class="step">
+                2️⃣ Toca "Favoritos" → "Agregar favorito"
             </div>
             <div class="step">
                 <div class="star-icon">⭐</div>
-                2️⃣ Toca el ícono de estrella para agregar a favoritos
+                3️⃣ Nombre: "💱 Convertir Precios"
+                <br>
+                4️⃣ Pega el código copiado en "URL"
             </div>
             <div class="step">
-                ✨ ¡Listo! Ahora:
+                ✨ Para usar:
                 <ul style="margin: 10px 0 0 20px; padding: 0;">
                     <li>Ve al catálogo de Belcorp</li>
-                    <li>Toca los tres puntos ⋮</li>
-                    <li>Selecciona este favorito</li>
+                    <li>Toca Favoritos</li>
+                    <li>Selecciona "💱 Convertir Precios"</li>
                 </ul>
             </div>
         </div>
@@ -107,13 +135,23 @@
             <br>🟢 Verde: Productos regulares (+40%)
             <br>🔴 Rojo: Productos pesados (+80%)
         </div>
+
+        <textarea id="codeText" style="position: absolute; left: -9999px;">javascript:(function(){var s=document.createElement('script');s.src='https://calebanderson-coder.github.io/belcorp-price-converter/mobile/converter.js';document.body.appendChild(s);})();</textarea>
     </div>
 
     <script>
-        document.getElementById('bookmarklet').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Toca los tres puntos (⋮) arriba y luego el ícono de estrella ⭐ para agregar a favoritos');
-        });
+        function copyCode() {
+            var codeText = document.getElementById('codeText');
+            codeText.select();
+            document.execCommand('copy');
+            
+            var successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 2000);
+        }
     </script>
 </body>
 </html>
