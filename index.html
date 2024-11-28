@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belcorp Price Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #e75480;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .bookmarklet {
+            background: #e75480;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: move;
+        }
+        .bookmarklet:hover {
+            background: #d64d73;
+        }
+        .instructions {
+            margin-top: 30px;
+        }
+        .step {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border-left: 4px solid #e75480;
+        }
+        .step-number {
+            color: #e75480;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .note {
+            background: #fff3f6;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛍️ Belcorp Price Converter</h1>
+        
+        <div class="instructions">
+            <div class="step">
+                <span class="step-number">1️⃣</span>
+                <strong>Arrastra este botón a tu barra de favoritos:</strong><br>
+                <a class="bookmarklet" href="javascript:(function(){var s=document.createElement('script');s.src='https://raw.githubusercontent.com/CalebAnderson-Coder/belcorp-price-converter/main/mobile/converter.js';document.body.appendChild(s);})();">
+                    💱 Convertir Precios
+                </a>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2️⃣</span>
+                <strong>Ve al catálogo digital de Belcorp</strong><br>
+                Ingresa a tu catálogo digital normalmente
+            </div>
+
+            <div class="step">
+                <span class="step-number">3️⃣</span>
+                <strong>Toca el botón "Convertir Precios" en tus favoritos</strong><br>
+                Los precios se convertirán automáticamente a USD
+            </div>
+        </div>
+
+        <div class="note">
+            <p><span class="emoji">💡</span> <strong>Nota:</strong> Los precios convertidos aparecerán:</p>
+            <ul>
+                <li>🟢 Verde: Productos regulares (+40%)</li>
+                <li>🔴 Rojo: Productos pesados (+80%)</li>
+            </ul>
+            <p><span class="emoji">💱</span> Tasa de cambio: 1 USD = 3,100 COP</p>
+        </div>
+    </div>
+</body>
+</html>
