@@ -123,12 +123,12 @@
         </div>
 
         <div class="note">
-            💡 Los precios aparecerán:
-            <br>🟢 Verde: Productos regulares (+40%)
-            <br>🔴 Rojo: Productos pesados (+80%)
+            💡 Los precios aparecerán automáticamente en verde junto a los precios originales
+            <br>🔄 Se actualizan cada segundo
+            <br>💰 Tasa: 1 USD = 3,100 COP (+40% markup)
         </div>
 
-        <textarea id="codeText" style="position: absolute; left: -9999px;">javascript:(function(){const EXCHANGE_RATE=3100;const REGULAR_MARKUP=1.40;function convertPrice(text){const price=parseFloat(text.replace(/[^0-9.]/g,''));const usd=(price/EXCHANGE_RATE)*REGULAR_MARKUP;return usd.toFixed(2)}const button=document.createElement('button');button.style.cssText='position:fixed;bottom:20px;right:20px;background:#e75480;color:white;padding:15px;border-radius:25px;box-shadow:0 2px 10px rgba(0,0,0,0.2);z-index:9999;font-family:Arial;cursor:pointer;border:none;';button.textContent='💱 Actualizar Precios';function updatePrices(){document.querySelectorAll('*').forEach(el=>{if(el.childNodes.length===1&&el.textContent.includes('$')){const usdPrice=convertPrice(el.textContent);if(!el.querySelector('.usd-price')){const span=document.createElement('span');span.className='usd-price';span.style.color='#4CAF50';span.style.marginLeft='10px';span.style.fontWeight='bold';span.textContent=`$${usdPrice}`;el.appendChild(span)}}})}button.onclick=updatePrices;document.body.appendChild(button);updatePrices();setInterval(updatePrices,3000);})();</textarea>
+        <textarea id="codeText" style="position: absolute; left: -9999px;">javascript:(function(){const EXCHANGE_RATE=3100;const MARKUP=1.40;function convertPrice(text){try{const price=parseFloat(text.replace(/[^0-9.]/g,''));if(!isNaN(price)){const usd=(price/EXCHANGE_RATE)*MARKUP;return usd.toFixed(2)}return null}catch(e){return null}}function updatePrices(){const elements=document.getElementsByTagName('*');for(let el of elements){if(el.childNodes.length===1&&el.firstChild.nodeType===3&&el.textContent.includes('$')&&!el.hasAttribute('data-converted')){const usdPrice=convertPrice(el.textContent);if(usdPrice){el.setAttribute('data-converted','true');el.innerHTML+=` <span style="color:#4CAF50;font-weight:bold">$${usdPrice}</span>`;}}}}updatePrices();setInterval(updatePrices,1000);alert('¡Convertidor activado! Los precios en dólares aparecerán en verde.');})();</textarea>
     </div>
 
     <script>
