@@ -3,107 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belcorp Price Converter</title>
+    <title>Convertidor de Precios Belcorp</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background: #f5f5f5;
             color: #333;
             line-height: 1.6;
+            text-align: center;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h1 {
             color: #e75480;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            font-size: 24px;
         }
-        .bookmarklet {
+        #bookmarklet {
+            display: inline-block;
             background: #e75480;
             color: white;
+            text-decoration: none;
             padding: 15px 30px;
             border-radius: 25px;
-            text-decoration: none;
-            display: inline-block;
-            margin: 20px 0;
-            font-weight: bold;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            cursor: move;
+            font-size: 18px;
+            margin: 20px auto;
+            box-shadow: 0 4px 10px rgba(231,84,128,0.3);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
         }
-        .bookmarklet:hover {
-            background: #d64d73;
+        .arrow {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: auto;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
         }
         .instructions {
-            margin-top: 30px;
+            margin: 20px auto;
+            max-width: 300px;
+            text-align: left;
+            font-size: 16px;
         }
         .step {
-            margin-bottom: 20px;
+            background: #fff9fa;
             padding: 15px;
-            background: #f9f9f9;
+            margin: 10px 0;
             border-radius: 10px;
             border-left: 4px solid #e75480;
-        }
-        .step-number {
-            color: #e75480;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        .note {
-            background: #fff3f6;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 30px;
-            font-size: 0.9em;
-        }
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🛍️ Belcorp Price Converter</h1>
+        <h1>Convertidor de Precios Belcorp</h1>
         
+        <a id="bookmarklet" href="javascript:(function(){var s=document.createElement('script');s.src='https://calebanderson-coder.github.io/belcorp-price-converter/mobile/converter.js';document.body.appendChild(s);})();">
+            💱 Convertir Precios
+        </a>
+
         <div class="instructions">
             <div class="step">
-                <span class="step-number">1️⃣</span>
-                <strong>Arrastra este botón a tu barra de favoritos:</strong><br>
-                <a class="bookmarklet" href="javascript:(function(){var s=document.createElement('script');s.src='https://raw.githubusercontent.com/CalebAnderson-Coder/belcorp-price-converter/main/mobile/converter.js';document.body.appendChild(s);})();">
-                    💱 Convertir Precios
-                </a>
+                ☝️ Toca y mantén presionado el botón rosa de arriba
             </div>
-
             <div class="step">
-                <span class="step-number">2️⃣</span>
-                <strong>Ve al catálogo digital de Belcorp</strong><br>
-                Ingresa a tu catálogo digital normalmente
+                ⭐ Selecciona "Agregar a favoritos"
             </div>
-
             <div class="step">
-                <span class="step-number">3️⃣</span>
-                <strong>Toca el botón "Convertir Precios" en tus favoritos</strong><br>
-                Los precios se convertirán automáticamente a USD
+                ✨ ¡Listo! Ya puedes usarlo en el catálogo
             </div>
         </div>
 
-        <div class="note">
-            <p><span class="emoji">💡</span> <strong>Nota:</strong> Los precios convertidos aparecerán:</p>
-            <ul>
-                <li>🟢 Verde: Productos regulares (+40%)</li>
-                <li>🔴 Rojo: Productos pesados (+80%)</li>
-            </ul>
-            <p><span class="emoji">💱</span> Tasa de cambio: 1 USD = 3,100 COP</p>
-        </div>
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNlNzU0ODAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iNSIgeTE9IjEyIiB4Mj0iMTkiIHkyPSIxMiI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjEyIDUgMTkgMTIgMTIgMTkiPjwvcG9seWxpbmU+PC9zdmc+" class="arrow" alt="Flecha indicadora">
     </div>
+
+    <script>
+        document.getElementById('bookmarklet').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Mantén presionado el botón rosa y selecciona "Agregar a favoritos"');
+        });
+    </script>
 </body>
 </html>
