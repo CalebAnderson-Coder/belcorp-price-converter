@@ -237,13 +237,53 @@
         `;
 
         // Configurar el iframe
-        window.onload = function() {
-            const catalogUrl = getQueryParam('url');
-            if (!catalogUrl) {
-                showError('URL del catálogo no proporcionada');
-                return;
-            }
+       window.onload = function() {
+    const catalogUrl = getQueryParam('url');
+    if (!catalogUrl) {
+        showError('URL del catálogo no proporcionada');
+        return;
+    }
 
+    const frame = document.getElementById('catalog-frame');
+    
+    // Configurar el iframe con sandbox y allow-same-origin
+    frame.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms');
+    frame.setAttribute('allow', 'fullscreen');
+    
+    frame.onload = function() {
+        try {
+            // Inyectar el script de conversión
+            const script = frame.contentDocument.createElement('script');
+            script.textContent = priceConverter;
+            frame.contentDocument.head.appendChild(script);
+            
+            // Ocultar la pantalla de carga
+            document.getElementById('loading').style.display = 'none';
+        } catch (e) {
+            console.error('Error al inyectar el script:', e);
+            showError('Error al cargar el convertidor de precios. Por favor, intenta nuevamente.');
+        }
+    };
+
+    frame.onerror = function() {
+        showError('Error al cargar el catálogo. Por favor, verifica la URL e intenta nuevamente.');
+    };
+    
+    try {
+        const url = new URL(catalogUrl);
+        if (!url.hostname.includes('somosbelcorp')) {
+            showError('Por favor ingresa una URL válida de un catálogo de Belcorp');
+            return;
+        }
+        // Asegurarse de que la URL use HTTPS
+        if (url.protocol === 'http:') {
+            url.protocol = 'https:';
+        }
+        frame.src = url.toString();
+    } catch (e) {
+        showError('URL inválida. Por favor verifica el enlace del catálogo');
+    }
+};
             const frame = document.getElementById('catalog-frame');
             frame.onload = function() {
                 try {
