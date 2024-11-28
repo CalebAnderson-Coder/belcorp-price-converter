@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            width: 300px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .rates {
+            margin-top: 15px;
+            text-align: left;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .rates h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .rates ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .rates li {
+            margin: 5px 0;
+            color: #666;
+        }
+        .legend {
+            margin-top: 15px;
+            text-align: left;
+        }
+        .color-sample {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+            border-radius: 50%;
+        }
+        .regular {
+            background-color: #28a745;
+        }
+        .heavy {
+            background-color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Belcorp Price Converter</h2>
+        <div class="status">
+            Convertidor activo
+        </div>
+        <div class="rates">
+            <h3>Tasas de conversión:</h3>
+            <ul>
+                <li>1 USD = 3,100 COP</li>
+                <li>Productos regulares: +40%</li>
+                <li>Productos pesados: +80%</li>
+                <li>Límite peso: 700g</li>
+            </ul>
+        </div>
+        <div class="legend">
+            <p><span class="color-sample regular"></span> Productos regulares</p>
+            <p><span class="color-sample heavy"></span> Productos pesados</p>
+        </div>
+    </div>
+</body>
+</html>
