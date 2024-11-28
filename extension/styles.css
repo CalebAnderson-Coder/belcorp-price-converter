@@ -1,0 +1,13 @@
+.belcorp-usd-price {
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: 0.9em;
+}
+
+.belcorp-usd-price[data-heavy="true"] {
+    color: #ff6b6b;
+}
+
+.belcorp-usd-price[data-heavy="false"] {
+    color: #28a745;
+}
