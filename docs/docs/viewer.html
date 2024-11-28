@@ -264,7 +264,19 @@
                 showError('Error al cargar el catálogo. Por favor, verifica la URL e intenta nuevamente.');
             };
             
-            frame.src = catalogUrl;
+          try {
+    const url = new URL(catalogUrl);
+    if (!url.hostname.includes('somosbelcorp')) {
+        showError('Por favor ingresa una URL válida de un catálogo de Belcorp');
+        return;
+    }
+    if (url.protocol === 'http:') {
+        url.protocol = 'https:';
+    }
+    frame.src = url.toString();
+} catch (e) {
+    showError('URL inválida. Por favor verifica el enlace del catálogo');
+}
         };
     </script>
 </body>
