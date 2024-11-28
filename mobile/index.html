@@ -123,12 +123,12 @@
         </div>
 
         <div class="note">
-            💡 Los precios aparecerán automáticamente en verde junto a los precios originales
-            <br>🔄 Se actualizan cada segundo
+            💡 Toca el botón rosa flotante para actualizar los precios
             <br>💰 Tasa: 1 USD = 3,100 COP (+40% markup)
+            <br>✨ Los precios en dólares aparecen en verde
         </div>
 
-        <textarea id="codeText" style="position: absolute; left: -9999px;">javascript:(function(){const EXCHANGE_RATE=3100;const MARKUP=1.40;function convertPrice(text){try{const match=text.match(/\$\s*([\d,.]+)/);if(match){const price=parseFloat(match[1].replace(/,/g,''));if(!isNaN(price)){const usd=(price/EXCHANGE_RATE)*MARKUP;return usd.toFixed(2)}}return null}catch(e){console.log('Error:',e);return null}}function updatePrices(){const priceElements=document.querySelectorAll('.price, .product-price, [class*="price"], span, div');priceElements.forEach(el=>{if(!el.hasAttribute('data-converted')&&el.textContent.includes('$')){const usdPrice=convertPrice(el.textContent);if(usdPrice){el.setAttribute('data-converted','true');const usdSpan=document.createElement('span');usdSpan.style.color='#4CAF50';usdSpan.style.fontWeight='bold';usdSpan.style.marginLeft='5px';usdSpan.textContent=`$${usdPrice}`;el.appendChild(usdSpan)}}})}updatePrices();setInterval(updatePrices,1000);alert('¡Convertidor activado! Los precios en dólares aparecerán en verde.');})();</textarea>
+        <textarea id="codeText" style="position: absolute; left: -9999px;">javascript:(function(){const EXCHANGE_RATE=3100;const MARKUP=1.40;function convertPrice(copPrice){try{const price=parseFloat(copPrice.replace(/[^\d.]/g,''));const usd=(price/EXCHANGE_RATE)*MARKUP;return usd.toFixed(2)}catch(e){return null}}function addConversion(){document.querySelectorAll('*').forEach(element=>{const text=element.textContent;if(text&&text.includes('$')&&!element.hasAttribute('converted')){element.setAttribute('converted','true');const originalText=element.innerHTML;const price=text.match(/\$\s*[\d,.]+/);if(price){const usdPrice=convertPrice(price[0]);if(usdPrice){element.innerHTML=originalText+` <span style="color: #4CAF50; font-weight: bold">$${usdPrice}</span>`;}}}});}addConversion();const button=document.createElement('button');button.innerHTML='💱 Actualizar';button.style.cssText=`position:fixed;bottom:20px;right:20px;background:#e75480;color:white;padding:10px 20px;border-radius:25px;border:none;box-shadow:0 2px 5px rgba(0,0,0,0.2);z-index:9999;font-family:Arial;`;button.onclick=addConversion;document.body.appendChild(button);alert('¡Convertidor activado!\nToca el botón rosa para actualizar los precios.');})();</textarea>
     </div>
 
     <script>
